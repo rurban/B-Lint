@@ -1,6 +1,6 @@
 package B::Lint;
 
-our $VERSION = '1.11';    ## no critic
+our $VERSION = '1.12';    ## no critic
 
 =head1 NAME
 
@@ -174,6 +174,8 @@ the current filename and line number.
 =item unchecked system calls
 
 =item more tests, validate against older perls
+
+=back
 
 =head1 BUGS
 
@@ -624,7 +626,7 @@ UNDEFINED_SUBS: {
         no strict 'refs';    ## no critic strict
         if ( not exists &$subname ) {
             $subname =~ s/\Amain:://;
-            warning q[Nonexistant subroutine '%s' called], $subname;
+            warning q[Nonexistent subroutine '%s' called], $subname;
         }
         elsif ( not defined &$subname ) {
             $subname =~ s/\A\&?main:://;

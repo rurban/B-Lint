@@ -1,14 +1,8 @@
 #!./perl -w
 
 BEGIN {
-    if ( $ENV{PERL_CORE} ) {
-        chdir('t') if -d 't';
-        @INC = ( '.', '../lib' );
-    }
-    else {
-        unshift @INC, 't';
-        push @INC, "../../t";
-    }
+    unshift @INC, 't';
+    push @INC, "../../t";
     require Config;
     if ( ( $Config::Config{'extensions'} !~ /\bB\b/ ) ) {
         print "1..0 # Skip -- Perl configured without B module\n";
@@ -16,6 +10,9 @@ BEGIN {
     }
     require 'test.pl';
 }
+
+use strict;
+use warnings;
 
 plan tests => 29;
 
@@ -29,6 +26,7 @@ sub runlint ($$$;$) {
         stderr   => 1,
     );
     $res =~ s/-e syntax OK\n$//;
+    local $::Level = $::Level + 1;
     is( $res, $result, $testname || $opts );
 }
 
@@ -101,7 +99,7 @@ RESULT
     'private-names (method)';
 
 runlint 'undefined-subs', 'foo()', <<'RESULT';
-Nonexistant subroutine 'foo' called at -e line 1
+Nonexistent subroutine 'foo' called at -e line 1
 RESULT
 
 runlint 'undefined-subs', 'foo();sub foo;', <<'RESULT';
