@@ -1,5 +1,9 @@
 Revision history for B-Lint
 
+1.14    2012-09-11
+        Merge changes from perl core:
+         - Stop the PAUSE indexer from processing private modules
+
 1.13    2011-07-09
         Merge changes from perl core:
          - Fix typos

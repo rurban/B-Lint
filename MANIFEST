@@ -8,3 +8,4 @@ README
 t/lint.t
 t/pluglib/B/Lint/Plugin/Test.pm
 t/test.pl
+META.json                                Module JSON meta-data (added by MakeMaker)
