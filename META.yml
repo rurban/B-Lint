@@ -21,4 +21,4 @@ requires:
   Module::Pluggable: 0
   Test::More: 0
   if: 0
-version: 1.16
+version: 1.17
