@@ -1,7 +1,7 @@
 package B::Lint;
 use if $] > 5.017, 'deprecate';
 
-our $VERSION = '1.17';    ## no critic
+our $VERSION = '1.18';    ## no critic
 
 =head1 NAME
 
@@ -196,7 +196,7 @@ use strict;
 use B qw( walkoptree_slow
     main_root main_cv walksymtable parents
     OPpOUR_INTRO
-    OPf_WANT_VOID OPf_WANT_LIST OPf_WANT OPf_STACKED SVf_POK );
+    OPf_WANT_VOID OPf_WANT_LIST OPf_WANT OPf_STACKED SVf_POK SVf_ROK );
 use Carp 'carp';
 
 # The current M::P doesn't know about .pmc files.
@@ -622,7 +622,9 @@ UNDEFINED_SUBS: {
             and $op->next->name eq "entersub";
 
         my $gv      = $op->gv_harder;
-        my $subname = $gv->STASH->NAME . "::" . $gv->NAME;
+        my $cv      = $gv->FLAGS & SVf_ROK ? $gv->RV : undef;
+        my $subname = ($cv || $gv)->STASH->NAME . "::"
+                    . ($cv ? $cv->NAME_HEK || $cv->GV->NAME : $gv->NAME);
 
         no strict 'refs';    ## no critic strict
         if ( not exists &$subname ) {

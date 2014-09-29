@@ -4,9 +4,9 @@
       "Joshua ben Jore <jjore@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.64, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "ExtUtils::MakeMaker version 6.98, CPAN::Meta::Converter version 2.142060",
    "license" : [
-      "unknown"
+      "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
@@ -33,11 +33,10 @@
       "runtime" : {
          "requires" : {
             "Module::Pluggable" : "0",
-            "Test::More" : "0",
             "if" : "0"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "1.17"
+   "version" : "1.18"
 }

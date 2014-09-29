@@ -1,7 +1,7 @@
 package B::Lint::Debug;
 use if $] > 5.017, 'deprecate';
 
-our $VERSION = '1.17';
+our $VERSION = '1.18';
 
 =head1 NAME
 

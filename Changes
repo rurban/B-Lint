@@ -1,5 +1,8 @@
 Revision history for B-Lint
 
+1.18    2014-09-29
+        apply fix for perl v5.21.4
+
 1.17    2013-0126
         make the use of "deprecate" conditional
 
