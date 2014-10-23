@@ -1,5 +1,8 @@
 Revision history for B-Lint
 
+1.19    2014-10-23
+        another fix for blead, now to support METHOP
+
 1.18    2014-09-29
         apply fix for perl v5.21.4
 

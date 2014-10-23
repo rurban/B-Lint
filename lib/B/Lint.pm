@@ -1,7 +1,7 @@
 package B::Lint;
 use if $] > 5.017, 'deprecate';
 
-our $VERSION = '1.18';    ## no critic
+our $VERSION = '1.19';    ## no critic
 
 =head1 NAME
 
@@ -318,6 +318,7 @@ sub inside_foreach_modifier {
 for (
     [qw[ B::PADOP::gv_harder gv padix]],
     [qw[ B::SVOP::sv_harder  sv targ]],
+    [qw[ B::METHOP::sv_harder meth_sv targ]],
     [qw[ B::SVOP::gv_harder gv padix]]
     )
 {
@@ -516,7 +517,7 @@ IMPLICIT_FOO: {
 # scratchpad to find things. I suppose this is so a optree can be
 # shared between threads and all symbol table muckery will just get
 # written to a scratchpad.
-*B::PADOP::lint = *B::PADOP::lint = \&B::SVOP::lint;
+*B::METHOP::lint = *B::PADOP::lint = *B::PADOP::lint = \&B::SVOP::lint;
 
 sub B::SVOP::lint {
     my ($op) = @_;
