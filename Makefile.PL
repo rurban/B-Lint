@@ -14,4 +14,8 @@ WriteMakefile(
 
     # B::Lint is a dual-life module. Must install over core for pre-5.12 perls.
     INSTALLDIRS => $] < 5.012 ? 'perl' : 'site',
+    PM          => {
+        'lib/B/Lint.pm'       => '$(INST_ARCHLIB)/B/Lint.pm',
+        'lib/B/Lint/Debug.pm' => '$(INST_ARCHLIB)/B/Lint/Debug.pm',
+    },
 );

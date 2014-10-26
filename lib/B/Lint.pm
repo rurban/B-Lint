@@ -1,7 +1,7 @@
 package B::Lint;
 use if $] > 5.017, 'deprecate';
 
-our $VERSION = '1.19';    ## no critic
+our $VERSION = '1.20';    ## no critic
 
 =head1 NAME
 

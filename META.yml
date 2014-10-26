@@ -20,4 +20,4 @@ no_index:
 requires:
   Module::Pluggable: '0'
   if: '0'
-version: '1.19'
+version: '1.20'

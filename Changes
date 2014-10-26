@@ -1,5 +1,9 @@
 Revision history for B-Lint
 
+1.20    2014-10-26
+      - install to archlib, as was done in 1.17 and previous, to avoid being
+        skipped over because of and older install appearing first in @INC
+
 1.19    2014-10-23
         another fix for blead, now to support METHOP
 
