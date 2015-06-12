@@ -85,6 +85,10 @@ trap are:
 
 Neither of these will do what a naive user would expect.
 
+Notice: Perl 5.22.0 does not report C<foo> in C<$b{foo}> as BARE token
+anymore. Therefore L<B::Lint> test is not reliable here. See
+L<CPAN RT#101115|https://rt.cpan.org/Public/Bug/Display.html?id=101115>.
+
 =item B<dollar-underscore>
 
 This option warns whenever C<$_> is used either explicitly anywhere or

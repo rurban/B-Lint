@@ -14,7 +14,7 @@ BEGIN {
 use strict;
 use warnings;
 
-plan tests => 29;
+plan tests => 30;
 
 # Runs a separate perl interpreter with the appropriate lint options
 # turned on
@@ -116,10 +116,17 @@ RESULT
 
 runlint 'bare-subs', 'sub bare(){1};$x=bare', '';
 
-runlint 'bare-subs', 'sub bare(){1}; $x=[bare=>0]; $x=$y{bare}', <<'RESULT';
-Bare sub name 'bare' interpreted as string at -e line 1
+runlint 'bare-subs', 'sub bare(){1}; $x=[bare=>0]', <<'RESULT';
 Bare sub name 'bare' interpreted as string at -e line 1
 RESULT
+
+SKIP: {
+    skip 'Perl 5.22 stopped marking $hash{bare} as BARE word, CPAN RT#101115',
+        1, if $] >= 5.022;
+    runlint 'bare-subs', 'sub bare(){1}; $x=$y{bare}', <<'RESULT';
+Bare sub name 'bare' interpreted as string at -e line 1
+RESULT
+}
 
 {
 
