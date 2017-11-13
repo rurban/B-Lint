@@ -1,0 +1,14 @@
+/log.*
+*~
+/B-Lint-*
+/.gdbinit
+/.bash_history
+/*.patch
+/META.yml
+/MYMETA.json
+/MYMETA.yml
+/Makefile
+/Makefile.old
+/blib
+/pm_to_blib
+/Debian_CPANTS.txt

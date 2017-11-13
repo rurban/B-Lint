@@ -1,7 +1,7 @@
 package B::Lint;
 use if $] > 5.017, 'deprecate';
 
-our $VERSION = '1.21';    ## no critic
+our $VERSION = '1.22';    ## no critic
 
 =head1 NAME
 
@@ -415,14 +415,16 @@ CONTEXT: {
 
         next if $implies_ok_context{$pname};
 
-        # Three special cases to deal with: "foreach (@foo)", "delete
+        # Four special cases to deal with: "foreach (@foo)", "delete
         # $a{$b}", and "exists $a{$b}" null out the parent so we have to
         # check for a parent of pp_null and a grandparent of
-        # pp_enteriter, pp_delete, pp_exists
+        # pp_enteriter, pp_delete, pp_exists.
+        # return @array is also wrong, return has always list context.
 
         next
             if $pname eq "null"
             and $gparent->name =~ m/\A(?:delete|enteriter|exists)\z/xms;
+        next if $pname eq "return";
 
         # our( @bar ); would also trigger this error so I exclude
         # that.

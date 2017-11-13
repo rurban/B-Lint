@@ -1,5 +1,8 @@
 Revision history for B-Lint
 
+1.22    2017-11-13 rurban
+      - fix wrong return @array scalar context warning (Closes RT#97873)
+
 1.21    2017-11-13 rurban
       - skip $hash{bare} as BARE word test since 5.22 (Closes RT#101115)
 

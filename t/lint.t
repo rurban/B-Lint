@@ -14,7 +14,7 @@ BEGIN {
 use strict;
 use warnings;
 
-plan tests => 30;
+plan tests => 31;
 
 # Runs a separate perl interpreter with the appropriate lint options
 # turned on
@@ -52,6 +52,8 @@ RESULT
 runlint 'context', 'our @bar', '';
 
 runlint 'context', 'exists $BAR{BAZ}', '';
+
+runlint 'context', 'sub foo{return @_}', ''; # return CPAN RT#97873
 
 runlint 'implicit-read', '/foo/', <<'RESULT';
 Implicit match on $_ at -e line 1
@@ -129,7 +131,6 @@ RESULT
 }
 
 {
-
     # Check for backwards-compatible plugin support. This was where
     # preloaded mdoules would register themselves with B::Lint.
     my $res = runperl(
@@ -142,7 +143,6 @@ RESULT
 }
 
 {
-
     # Check for Module::Plugin support
     my $res = runperl(
         switches => [ '-It/pluglib', '-MO=Lint,none' ],
