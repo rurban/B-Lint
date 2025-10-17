@@ -1,5 +1,8 @@
 Revision history for B-Lint
 
+1.23    2025-10-08 rurban
+      - re-upload. it's deprecated, but the official version 1.20 breaks tests
+
 1.22    2017-11-13 rurban
       - fix wrong return @array scalar context warning (Closes RT#97873)
 
