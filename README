@@ -1,49 +1,154 @@
-B-Lint
+NAME
+    B::Lint - Perl lint
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+SYNOPSIS
+    perl -MO=Lint[,OPTIONS] foo.pl
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it get an idea of the modules uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+DESCRIPTION
+    The B::Lint module is equivalent to an extended version of the -w option
+    of perl. It is named after the program lint which carries out a similar
+    process for C programs.
 
-INSTALLATION
+OPTIONS AND LINT CHECKS
+    Option words are separated by commas (not whitespace) and follow the
+    usual conventions of compiler backend options. Following any options
+    (indicated by a leading -) come lint check arguments. Each such argument
+    (apart from the special all and none options) is a word representing one
+    possible lint check (turning on that check) or is no-foo (turning off
+    that check). Before processing the check arguments, a standard list of
+    checks is turned on. Later options override earlier ones. Available
+    options are:
 
-To install this module, run the following commands:
+    magic-diamond
+            Produces a warning whenever the magic "<>" readline is used.
+            Internally it uses perl's two-argument open which itself treats
+            filenames with special characters specially. This could allow
+            interestingly named files to have unexpected effects when
+            reading.
 
-    perl Makefile.PL
-    make
-    make test
-    make install
+              % touch 'rm *|'
+              % perl -pe 1
 
+            The above creates a file named "rm *|". When perl opens it with
+            "<>" it actually executes the shell program "rm *". This makes
+            "<>" dangerous to use carelessly.
 
-SUPPORT AND DOCUMENTATION
+    context Produces a warning whenever an array is used in an implicit
+            scalar context. For example, both of the lines
 
-After installing, you can find documentation for this module with the perldoc command.
+                $foo = length(@bar);
+                $foo = @bar;
 
-    perldoc B::Lint
+            will elicit a warning. Using an explicit scalar() silences the
+            warning. For example,
 
-You can also look for information at:
+                $foo = scalar(@bar);
 
-    Search CPAN
-        http://search.cpan.org/dist/B-Lint
+    implicit-read and implicit-write
+            These options produce a warning whenever an operation implicitly
+            reads or (respectively) writes to one of Perl's special
+            variables. For example, implicit-read will warn about these:
 
-    CPAN Request Tracker:
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=B-Lint
+                /foo/;
 
-    AnnoCPAN, annotated CPAN documentation:
-        http://annocpan.org/dist/B-Lint
+            and implicit-write will warn about these:
 
-    CPAN Ratings:
-        http://cpanratings.perl.org/d/B-Lint
+                s/foo/bar/;
 
-COPYRIGHT AND LICENCE
+            Both implicit-read and implicit-write warn about this:
 
-Copyright (C) 2007 Joshua ben Jore
+                for (@a) { ... }
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+    bare-subs
+            This option warns whenever a bareword is implicitly quoted, but
+            is also the name of a subroutine in the current package. Typical
+            mistakes that it will trap are:
+
+                use constant foo => 'bar';
+                @a = ( foo => 1 );
+                $b{foo} = 2;
+
+            Neither of these will do what a naive user would expect.
+
+            Notice: Perl 5.22.0 does not report "foo" in $b{foo} as BARE
+            token anymore. Therefore B::Lint test is not reliable here. See
+            CPAN RT#101115
+            <https://rt.cpan.org/Public/Bug/Display.html?id=101115>.
+
+    dollar-underscore
+            This option warns whenever $_ is used either explicitly anywhere
+            or as the implicit argument of a print statement.
+
+    private-names
+            This option warns on each use of any variable, subroutine or
+            method name that lives in a non-current package but begins with
+            an underscore ("_"). Warnings aren't issued for the special case
+            of the single character name "_" by itself (e.g. $_ and @_).
+
+    undefined-subs
+            This option warns whenever an undefined subroutine is invoked.
+            This option will only catch explicitly invoked subroutines such
+            as foo() and not indirect invocations such as &$subref() or
+            "$obj->meth()". Note that some programs or modules delay
+            definition of subs until runtime by means of the AUTOLOAD
+            mechanism.
+
+    regexp-variables
+            This option warns whenever one of the regexp variables $`, $& or
+            $' is used. Any occurrence of any of these variables in your
+            program can slow your whole program down. See perlre for
+            details.
+
+    all     Turn all warnings on.
+
+    none    Turn all warnings off.
+
+NON LINT-CHECK OPTIONS
+    -u Package
+            Normally, Lint only checks the main code of the program together
+            with all subs defined in package main. The -u option lets you
+            include other package names whose subs are then checked by Lint.
+
+EXTENDING LINT
+    Lint can be extended by with plugins. Lint uses Module::Pluggable to
+    find available plugins. Plugins are expected but not required to inform
+    Lint of which checks they are adding.
+
+    The "B::Lint->register_plugin( MyPlugin => \@new_checks )" method adds
+    the list of @new_checks to the list of valid checks. If your module
+    wasn't loaded by Module::Pluggable then your class name is added to the
+    list of plugins.
+
+    You must create a match( \%checks ) method in your plugin class or one
+    of its parents. It will be called on every op as a regular method call
+    with a hash ref of checks as its parameter.
+
+    The class methods "B::Lint->file" and "B::Lint->line" contain the
+    current filename and line number.
+
+      package Sample;
+      use B::Lint;
+      B::Lint->register_plugin( Sample => [ 'good_taste' ] );
+  
+      sub match {
+          my ( $op, $checks_href ) = shift @_;
+          if ( $checks_href->{good_taste} ) {
+              ...
+          }
+      }
+
+TODO
+    while(<FH>) stomps $_
+    strict oo
+    unchecked system calls
+    more tests, validate against older perls
+
+BUGS
+    This is only a very preliminary version.
+
+AUTHOR
+    Malcolm Beattie, mbeattie@sable.ox.ac.uk.
+
+ACKNOWLEDGEMENTS
+    Sebastien Aperghis-Tramoni - bug fixes
+

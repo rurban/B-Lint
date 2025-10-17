@@ -160,7 +160,7 @@ the current filename and line number.
   package Sample;
   use B::Lint;
   B::Lint->register_plugin( Sample => [ 'good_taste' ] );
-  
+
   sub match {
       my ( $op, $checks_href ) = shift @_;
       if ( $checks_href->{good_taste} ) {
@@ -193,6 +193,12 @@ Malcolm Beattie, mbeattie@sable.ox.ac.uk.
 =head1 ACKNOWLEDGEMENTS
 
 Sebastien Aperghis-Tramoni - bug fixes
+Joshua ben Jore - old maintainer
+Reini Urban - maintainer
+
+Co-maintainers:
+
+ASH, CLKAO, FLORA, GRUBER, JCROMIE, NWCLARK, RJBS
 
 =cut
 
