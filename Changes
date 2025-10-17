@@ -1,5 +1,8 @@
 Revision history for B-Lint
 
+1.24    2025-10-08 rurban
+      - re-upload with B::Lint::Plugin::Test hidden from PAUSE
+
 1.23    2025-10-08 rurban
       - re-upload. it's deprecated, but the official version 1.20 breaks tests
 
