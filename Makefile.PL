@@ -46,7 +46,7 @@ README : \$(VERSION_FROM)
 	pod2text \$(VERSION_FROM) > README
 
 release : dist
-	git tag \$(VERSION)
+	git tag v\$(VERSION)
 	cpan-upload \$(DISTVNAME).tar\$(SUFFIX)
 	git push
 	git push --tags
