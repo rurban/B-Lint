@@ -1,4 +1,5 @@
-package B::Lint::Plugin::Test;
+package # hide from PAUSE
+    B::Lint::Plugin::Test;
 use strict;
 use warnings;
 
